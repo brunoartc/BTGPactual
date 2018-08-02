@@ -29,13 +29,14 @@ app.post('/contratos/cadastrar', function(req, res) {
   fdata.validThru = req.body.validThru
   fdata.type = req.body.type
 
-  admin.database().ref('/contracts/' + fdata.strike).set(fdata)
+  admin.database().ref('/contracts/' + req.body.validThru "/"+ req.body.type "/"+ fdata.strike ).set({"info":fdata})
+  admin.database().ref('/validThru/contracts/' + req.body.validThru "/"+ req.body.type "/"+ fdata.strike).set(fdata.validThru)
   res.send("Contrato cadastrado com sucesso")
 }); //OKK
 
 
 app.get('/contratos', function(req, res) {
-  admin.database().ref("/contracts").once('value', function(snapshot) {
+  admin.database().ref('/validThru/contracts/').once('value', function(snapshot) {
     res.send(snapshot.val())
   });
 }); //OKK
@@ -69,8 +70,8 @@ app.get('/contratos/ordens/', function(req, res) {
 
 function infoFromContract(contractId, id, amount) {
   return new Promise(function(resolve, reject) {
-    admin.database().ref("/contracts/" + contractId + "/orders/").child(id).once('value').then(function(snap) {
-      if (snap.val().amount >= amount) {
+    admin.database().ref("/contracts/" + contractId).child('info').once('value').then(function(snap) {
+      if (snap.val() != undefined) {
         return resolve(snap.val())
       } else {
         return reject("Transacao nao concluida")
@@ -78,6 +79,30 @@ function infoFromContract(contractId, id, amount) {
     });
   })
 }
+
+function validInfo(contractId) {
+  return new Promise(function(resolve, reject) {
+    admin.database().ref('/validThru/contracts/').child(contractId).once('value').then(function(snap) {
+      if (snap.val() != undefined) {
+        return resolve(snap.val())
+      } else {
+        return reject("Transacao nao concluida")
+      }
+    });
+  })
+}
+
+function accountInfo(accountId) {
+  return new Promise(function(resolve, reject) {
+    admin.database().ref('/account/').child(accountId).once('value').then(function(snap) {
+      if (snap.val() != undefined) {
+        return resolve(snap.val())
+      } else {
+        return reject("Transacao nao concluida")
+      }
+    });
+  })
+} //TODO endpoint que retorne essa funcao
 
 
 
@@ -98,26 +123,30 @@ function buyFromContract(contractId, id, amount) {
 }
 
 
-function creditFromContract(contractId, fromAccountId, toAccountId, amount, type, price) {
+function creditFromContract(contractId, fromAccountId, toAccountId, amount, contract, validThru) {
   return new Promise(function(resolve, reject) {
     admin.database().ref("/contracts/" + contractId + "/account/" + fromAccountId).child(toAccountId).once('value').then(function(snap) {
       if (1 == 1) {
-        if (type == -1){
+        if (contract.type == -1){
           //TODO cria contrato ordem
           console.log("type -1");
         } else {
+          console.log("deu contrato pro ",fromAccountId);
           if (snap.val()!=null) {
-            admin.database().ref("/contracts/" + contractId + "/account/" + fromAccountId).child(toAccountId).set(snap.val() + type * amount) //ganha contratos
+            admin.database().ref("/contracts/" + contractId + "/account/" + fromAccountId).child(toAccountId).set(snap.val() + contract.type * amount) //ganha contratos
           } else {
-            admin.database().ref("/contracts/" + contractId + "/account/" + fromAccountId + "/" + toAccountId + "/").set(type * amount) //ganha contratos
+            admin.database().ref("/contracts/" + contractId + "/account/" + fromAccountId + "/" + toAccountId + "/").set(contract.type * amount) //ganha contratos
           }
 
 
         }
 
         admin.database().ref("/account/").child(fromAccountId).once('value').then(function(snap) {
-          admin.database().ref("/account/" + fromAccountId).child("money").set(snap.val().money - type * amount * price) //perde dinheiro ou ganha
+          if (contract.type == 1){
 
+            admin.database().ref("/account/" + fromAccountId + "/contracts/" + validThru + "/" + contractId).set(true) //perde dinheiro ou ganha
+          }
+          admin.database().ref("/account/" + fromAccountId).child("money").set(snap.val().money - contract.type * amount * contract.price) //perde dinheiro ou ganha
         })
         //
 
@@ -139,40 +168,21 @@ function creditFromContract(contractId, fromAccountId, toAccountId, amount, type
 
 
 
-
-
-
-//
-// function debitFromContract(contractId, toAccountId, amount, type, price) {
-//   console.log(" aqui o teste/account/" + toAccountId);
-//   return new Promise(function(resolve, reject) {
-//     admin.database().ref("/account").child(toAccountId).once('value').then(function(snap) {
-//       console.log(12321123123, snap.val(), type, amount, price);
-//       if (1 <= 1) {
-//         admin.database().ref("/account/" + toAccountId).child("money").set(snap.val().money + type * amount * price) //ganha dinheiro ou perde
-//
-//         return resolve("Transacao concluida")
-//       } else {
-//         return reject("Transacao nao concluida")
-//       }
-//     });
-//   })
-// }
-
-
-function debitFromContract(contractId, fromAccountId, toAccountId, amount, type, price) {
+function debitFromContract(contractId, fromAccountId, toAccountId, amount, contract, validThru) {
   return new Promise(function(resolve, reject) {
     console.log("debito foi chamado");
     admin.database().ref("/contracts/" + contractId + "/account/" + toAccountId).child(fromAccountId).once('value').then(function(snap) {
       if (1 == 1) {
-        if (type == -1){
-          //TODO cria contrato ordem
+        if (contract.type == -1){
+          //TODO cria contrato ordem do from account
           console.log("cria contrato");
+          console.log("deu contrato pro ",toAccountId);
           if (snap.val()!=null) {
 
 
             admin.database().ref("/contracts/" + contractId + "/account/" + toAccountId).child(fromAccountId).set(snap.val() + amount) //ganha contratos
           } else {
+            console.log("deu contrato pro ",toAccountId);
             admin.database().ref("/contracts/" + contractId + "/account/" + toAccountId + "/" + fromAccountId + "/").set(amount) //ganha contratos
           }
         } else {
@@ -182,8 +192,12 @@ function debitFromContract(contractId, fromAccountId, toAccountId, amount, type,
         }
 
         admin.database().ref("/account/").child(toAccountId).once('value').then(function(snap) {
-          admin.database().ref("/account/" + toAccountId).child("money").set(snap.val().money + type * amount * price) //perde dinheiro ou ganha
+          if (contract.type == -1){
+            admin.database().ref("/account/" + fromAccountId + "/contracts/" + validThru + "/" + contractId).set(true) //perde dinheiro ou ganha
+          }
 
+          admin.database().ref("/account/" + toAccountId).child("money").set(snap.val().money + contract.type * amount * contract.price) //perde dinheiro ou ganha
+          logOrder({"contractId":contractId, "fromAccountId":fromAccountId, "toAccountId":toAccountId, "amount":amount, "type":contract.type, "price":contract.price, "dateTime":Date.now()})
         })
         //
 
@@ -196,6 +210,16 @@ function debitFromContract(contractId, fromAccountId, toAccountId, amount, type,
       }
     });
   })
+}
+
+
+
+function logOrder(fdata) {
+  admin.database().ref('/orderstatement').push(fdata)
+}
+
+function functionName() {
+
 }
 
 
@@ -225,14 +249,18 @@ app.post('/contratos/ordem/executar', function(req, res) {
 app.get('/cte', function(req, res) {
   fromAccount = 2
   toAccount = 1
-  idContrato = "3BRL80"
+  idContrato = "3BRL80" //     validate/opcao/strike
   idOrdem = "-LIuKR4Exv6W_pQDxGgc"
   amount = 1
   // type -1 = venda
   buyFromContract(idContrato, idOrdem, amount).then(function(snap) {
-    debitFromContract(idContrato, fromAccount, toAccount, amount, snap.type, snap.price).then(console.log("debitou")).catch(console.log(456))
-    creditFromContract(idContrato, fromAccount, toAccount, amount, snap.type, snap.price).then(console.log("creditou")).catch(console.log(456))
-    //TODO Registar ordens finalizadas no banco de dados em /statement/orders
+    validInfo(1).then(function(teste) {
+      debitFromContract(idContrato, fromAccount, toAccount, amount, snap, teste).then(console.log("debitou")).catch(console.log(456))
+      creditFromContract(idContrato, fromAccount, toAccount, amount, snap, teste).then(console.log("creditou")).catch(console.log(456))
+    }).catch(console.log("nao gosto nao"))
+    // debitFromContract(idContrato, fromAccount, toAccount, amount, snap).then(console.log("debitou")).catch(console.log(456))
+    // creditFromContract(idContrato, fromAccount, toAccount, amount, snap).then(console.log("creditou")).catch(console.log(456))
+    //TOO Registar ordens finalizadas no banco de dados em /statement/orders quase DONE ja
   }).catch(console.log(456))
   res.send("Contrato cadastrado com sucesso")
 });
