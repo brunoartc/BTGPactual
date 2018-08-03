@@ -16,9 +16,22 @@ class SendIPFSContract{
     };
     sendContract(){
 
-        this._contractBuffer = Buffer.from(JSON.stringify(this._contract));
-
+        const fs = require('fs')
+        
         var ids = this._contractID;
+
+        this._contractArray = [this._contract]
+
+        if (fs.existsSync('dataHashContractID.json')) {
+
+            var dataHashContractID = JSON.parse((fs.readFileSync('dataHashContractID.json','utf-8')));
+            var dataHashContractIDReverse = dataHashContractID.reverse();
+            var dataHashContractLastHash = dataHashContractIDReverse[0]._path.hash;
+            this._contractArray.push({_lastHash:dataHashContractLastHash})
+
+        };
+
+        this._contractBuffer = Buffer.from(JSON.stringify(this._contractArray));
 
         ipfs.files.add(this._contractBuffer, function(err,files){
             if (err){

@@ -16,9 +16,22 @@ class SendIPFSClosedOrder{
     };
     sendClosedOrder(){
 
-        this._closedOrderBuffer = Buffer.from(JSON.stringify(this._closedOrder));
+        const fs = require('fs')
 
         var ids = this._closedOrderID;
+
+        this._closedOrderArray = [this._closedOrder]
+
+        if (fs.existsSync('dataHashCloserOrderID.json')) {
+
+            var dataHashCloserOrderID = JSON.parse((fs.readFileSync('dataHashCloserOrderID.json','utf-8')));
+            var dataHashCloserOrderIDReverse = dataHashCloserOrderID.reverse();
+            var dataHashClosedOrderLastHash = dataHashCloserOrderIDReverse[0]._path.hash;
+            this._closedOrderArray.push({_lastHash:dataHashClosedOrderLastHash})
+
+        };
+
+        this._closedOrderBuffer = Buffer.from(JSON.stringify(this._closedOrderArray));
 
         ipfs.files.add(this._closedOrderBuffer, function(err,files){
             if (err){
