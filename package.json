@@ -13,6 +13,7 @@
     "cookie-parse": "^0.4.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
-    "firebase-admin": "^5.13.1"
+    "firebase-admin": "^5.13.1",
+    "ipfs-api": "^22.3.0"
   }
 }
