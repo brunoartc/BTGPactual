@@ -37,7 +37,10 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 
-app.post('/contratos/cadastrar', function(req, res) {
+
+
+
+app.post('/contratos/simples/cadastrar', function(req, res) {
   var fdata = {}
   fdata.creationDate = Date.now()
   fdata.strike = req.body.strike
@@ -50,6 +53,28 @@ app.post('/contratos/cadastrar', function(req, res) {
   admin.database().ref('/info/contracts/' + req.body.validThru + "_" + req.body.type + "_" + fdata.strike + "BRL").set(fdata)
   res.send("Contrato cadastrado com sucesso")
 }); //OKK
+
+
+app.post('/contratos/barreira/cadastrar', function(req, res) {
+  var fdata = {}
+  fdata.creationDate = Date.now()
+  fdata.strike = req.body.strike
+  fdata.validThru = req.body.validThru
+  fdata.downup = req.body.downup
+  fdata.inout = req.body.inout
+  fdata.barrier = req.body.barrier
+  fdata.type = req.body.type // vanila or barrier
+  fdata.option = req.body.option // call put
+  fdata.valid=(fdata.inout != 'IN')
+//FAZER AQUI AQUIIIII
+  admin.database().ref('/contracts/' + req.body.type + "/" + req.body.validThru + "/" + fdata.downup + "/" + fdata.barrier + "/" + fdata.inout ).set({"info":fdata})
+  admin.database().ref('/validThru/contracts/' + req.body.type + "_" + req.body.validThru + "_" + fdata.downup + "_" + fdata.barrier + "_" + fdata.inout).set(req.body.validThru)
+  fdata.id = req.body.type + "_" + req.body.validThru + "_" + fdata.downup + "_" + fdata.barrier + "_" + fdata.inout
+
+  admin.database().ref('/info/contracts/' + req.body.type + "_" + req.body.validThru + "_" + fdata.downup + "_" + fdata.barrier + "_" + fdata.inout + "BRL").set(fdata)
+  res.send("Contrato cadastrado com sucesso")
+}); //OKK
+
 
 
 app.get('/contratos', function(req, res) {
@@ -81,6 +106,24 @@ app.post('/contratos/ordens/cadastrar', function(req, res) {
   res.send("Ordem cadastrado com sucesso")
 });
 
+// app.post('/contratos/ordens/barreira/cadastrar', function(req, res) {
+//   var fdata = {}
+//   //BUG assinar contrato com assinatura digital(NADA IMPORTANTE, NAO DA TEMPO)
+//   fdata.contractId = req.body.contractId
+//   fdata.downup = req.body.downup
+//   fdata.inout = req.body.inout
+//   fdata.barrier = req.body.barrier
+//   fdata.accountId = req.body.accountId
+//   fdata.price = req.body.price //CADASTRAR UMA ORDEM NO SISTEMA COM SEU ID
+//   fdata.amount = req.body.amount
+//   fdata.type = req.body.type
+//   id = admin.database().ref('/contracts/' + req.body.contractId + '/orders/').push(fdata)
+//   fdata.id = id
+//   id = admin.database().ref('/contracts/' + req.body.contractId + '/orders/' + id).set(fdata)
+//   admin.database().ref('/contracts/' + req.body.contractId + '/orders/ids').set(id.getKey())
+//
+//   res.send("Ordem cadastrado com sucesso")
+// });
 
 function buildOrders(response) {
   divtemplate = ['<div class="second w-row"><div class="column-11 w-col w-col-6"><p class="paragraph-3 sell">','</p></div><div class="column-12 w-col w-col-6"><p class="paragraph-4">','</p></div></div><form action="contratos/ordem/executar" method="post"><input type="hidden" name="fromAccount" value="','"><input type="hidden" name="toAccount" value="','"><input type="hidden" name="idContrato" value="','"><input type="hidden" name="idOrdem" value="','"><input type="hidden" name="amount" value="','"><input type="submit" class="link-5 w-button" value="Executar"></form>']
@@ -135,6 +178,60 @@ app.get('/contratos/ordens/ids', function(req, res) {
     }
     res.send(response)
   });
+});
+
+
+
+app.get('/insert/ptax', function(req, res) {
+  ptax = req.query.ptax
+  lastptax = req.query.lastptax
+  var data = new Date()
+  day = data.getDate()
+  mounth = data.getMonth()+1
+  year = data.getFullYear()
+  admin.database().ref('/contracts/barrier/').once('value', function(snap) {
+    invalidDates = []
+    for (i in snap.val()){
+      dataContrato = i.split("-")
+
+      if ((year <= parseInt(dataContrato[0])) && (mounth <= parseInt(dataContrato[1])) && (day <= parseInt(dataContrato[2]))){
+        dataId = dataContrato.join('-')
+        console.log('teste',dataId);
+        //down up
+        //barrier
+        //inout
+        // admin.database().ref('/contracts/barrier/' + dataContrato.join('-') + "/UP/" + fdata.barrier + "/" + fdata.inout + "/info/valid" ).set(false)
+        admin.database().ref('/contracts/barrier/' + dataId + "/UP/").once('value', function(snapq) {
+          console.log(snapq.val());
+          for (i in snapq.val()){
+            console.log("SUBINDO",'/contracts/barrier/' + dataId + "/UP/" + i + "/IN/info/valid");
+            if (lastptax < i && i > ptax){ //SUBINDO
+              admin.database().ref('/contracts/barrier/'+ dataId +'/UP/'+ i +'/OUT/info/valid').set(false)
+              admin.database().ref('/contracts/barrier/'+ dataId +'/UP/'+ i +'/IN/info/valid').set(true)
+                //admin.database().ref("/contracts/" + contractId + "/account/" + fromAccountId + "/" + toAccountId + "/").set(contract.type * amount) //ganha contratos
+            } //pedir pro andre perguntar pro rafael
+          }
+        });
+
+        admin.database().ref('/contracts/barrier/' + dataId + "/DOWN/").once('value', function(snapq) {
+          for (i in snapq.val()){
+            if (lastptax > i && i < ptax){ //DESCENDO
+              console.log("DESUBINDO", '/contracts/barrier/' + dataId + "/DOWN/" + i + "/IN/info/valid", i);
+              admin.database().ref('/contracts/barrier/'+ dataId +'/DOWN/'+ i +'/OUT/info/valid').set(false)
+              admin.database().ref('/contracts/barrier/'+ dataId +'/DOWN/'+ i +'/IN/info/valid').set(true)
+            } //pedir pro andre perguntar pro rafael
+          }
+        });
+      }
+    }
+    res.send("OK")
+
+  })
+
+
+
+
+
 });
 
 
@@ -379,7 +476,7 @@ function executarOrdem(dayPrice, contractId, accountId) {
 })
 }
 
-executarOrdem(6,"2018-01-01_CALL_5",2)
+//executarOrdem(6,"2018-01-01_CALL_5",2)
 
 
 
