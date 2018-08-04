@@ -5,6 +5,9 @@ class MatchIDClosedOrderHash{
     matchIDClosedOrderHash(hash,ids){
         const fs = require('fs');
 
+        const callSendHashClosedOrderIPFS = require('./control')
+        callSendHashClosedOrderIPFS.sendHashIPFSEthClosedOrder(hash);
+
         if (fs.existsSync('dataHashCloserOrderID.json')) {
             var dataHashClosedOrder = JSON.parse(fs.readFileSync('dataHashCloserOrderID.json', 'utf8'));
             var newMatch = {_path:{ids,hash}};

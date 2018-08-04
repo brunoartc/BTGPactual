@@ -5,6 +5,9 @@ class MatchIDContractHash{
     matchIDContractHash(hash,ids){
         const fs = require('fs');
 
+        const callSendHashContractIPFS = require('./control')
+        callSendHashContractIPFS.sendHashIPFSEthContract(hash);
+
         if (fs.existsSync('dataHashContractID.json')) {
             var dataHashContract = JSON.parse(fs.readFileSync('dataHashContractID.json', 'utf8'));
             var newMatch = {_path:{ids,hash}};
