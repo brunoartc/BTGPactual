@@ -67,9 +67,13 @@ app.post('/contratos/barreira/cadastrar', function(req, res) {
   fdata.option = req.body.option // call put
   fdata.valid=(fdata.inout != 'IN')
 //FAZER AQUI AQUIIIII
+  if (req.body.type != 'vanilla') {
   admin.database().ref('/contracts/' + req.body.type + "/" + req.body.validThru + "/" + fdata.downup + "/" + fdata.barrier + "/" + fdata.inout ).set({"info":fdata})
   admin.database().ref('/validThru/contracts/' + req.body.type + "_" + req.body.validThru + "_" + fdata.downup + "_" + fdata.barrier + "_" + fdata.inout).set(req.body.validThru)
-  fdata.id = req.body.type + "_" + req.body.validThru + "_" + fdata.downup + "_" + fdata.barrier + "_" + fdata.inout
+  fdata.id = req.body.type + "_" + req.body.validThru + "_" + fdata.downup + "_" + fdata.barrier + "_" + fdata.inout} else {
+    admin.database().ref('/contracts/' + req.body.type + "/" + req.body.validThru + "/" + fdata.downup + "/" + fdata.barrier + "/" + fdata.inout ).set({"info":fdata})
+    admin.database().ref('/validThru/contracts/' + req.body.type + "_" + req.body.validThru + "_" + fdata.downup + "_" + fdata.barrier + "_" + fdata.inout).set(req.body.validThru)
+  }
 
   admin.database().ref('/info/contracts/' + req.body.type + "_" + req.body.validThru + "_" + fdata.downup + "_" + fdata.barrier + "_" + fdata.inout + "BRL").set(fdata)
   res.send("Contrato cadastrado com sucesso")
@@ -203,22 +207,27 @@ app.get('/insert/ptax', function(req, res) {
         // admin.database().ref('/contracts/barrier/' + dataContrato.join('-') + "/UP/" + fdata.barrier + "/" + fdata.inout + "/info/valid" ).set(false)
         admin.database().ref('/contracts/barrier/' + dataId + "/UP/").once('value', function(snapq) {
           console.log(snapq.val());
-          for (i in snapq.val()){
-            console.log("SUBINDO",'/contracts/barrier/' + dataId + "/UP/" + i + "/IN/info/valid");
-            if (lastptax < i && i > ptax){ //SUBINDO
-              admin.database().ref('/contracts/barrier/'+ dataId +'/UP/'+ i +'/OUT/info/valid').set(false)
-              admin.database().ref('/contracts/barrier/'+ dataId +'/UP/'+ i +'/IN/info/valid').set(true)
+          for (j in snapq.val()){
+
+
+
+            console.log((parseFloat(lastptax.replace(",",".")) < parseFloat(j.replace(",",".")) && parseFloat(j.replace(",",".")) > parseFloat(ptax.replace(",","."))));
+
+            if (parseFloat(lastptax.replace(",",".")) < parseFloat(j.replace(",",".")) && parseFloat(j.replace(",",".")) < parseFloat(ptax.replace(",","."))){ //SUBINDO
+              console.log("SUBINDO",'/contracts/barrier/' + dataId + "/UP/" + j.replace(",",".") + "/IN/info/valid");
+              admin.database().ref('/contracts/barrier/'+ dataId +'/UP/'+ j.replace(".",",") +'/OUT/info/valid').set(false)
+              admin.database().ref('/contracts/barrier/'+ dataId +'/UP/'+ j.replace(".",",") +'/IN/info/valid').set(true)
                 //admin.database().ref("/contracts/" + contractId + "/account/" + fromAccountId + "/" + toAccountId + "/").set(contract.type * amount) //ganha contratos
             } //pedir pro andre perguntar pro rafael
           }
         });
 
         admin.database().ref('/contracts/barrier/' + dataId + "/DOWN/").once('value', function(snapq) {
-          for (i in snapq.val()){
-            if (lastptax > i && i < ptax){ //DESCENDO
-              console.log("DESUBINDO", '/contracts/barrier/' + dataId + "/DOWN/" + i + "/IN/info/valid", i);
-              admin.database().ref('/contracts/barrier/'+ dataId +'/DOWN/'+ i +'/OUT/info/valid').set(false)
-              admin.database().ref('/contracts/barrier/'+ dataId +'/DOWN/'+ i +'/IN/info/valid').set(true)
+          for (j in snapq.val()){
+            if (parseFloat(lastptax.replace(",",".")) > parseFloat(j.replace(",",".")) && parseFloat(j.replace(",",".")) > parseFloat(ptax.replace(",","."))){ //DESCENDO
+              console.log("DESUBINDO", '/contracts/barrier/' + dataId + "/DOWN/" + j.replace(",",".") + "/IN/info/valid", i);
+              admin.database().ref('/contracts/barrier/'+ dataId +'/DOWN/'+ j.replace(".",",") +'/OUT/info/valid').set(false)
+              admin.database().ref('/contracts/barrier/'+ dataId +'/DOWN/'+ j.replace(".",",") +'/IN/info/valid').set(true)
             } //pedir pro andre perguntar pro rafael
           }
         });
@@ -335,10 +344,13 @@ app.get('/account/info/:accountId', function(req, res) {
 
 function checkBuild(contractId) {
   divtemplate = ['<div class="row-6 w-row"><div class="column-21 w-col w-col-4"><div class="text-block-6">','</div></div><div class="column-22 w-col w-col-4"><div class="text-block-7">','</div></div><div class="column-23 w-col w-col-4"><div class="text-block-8">','</div></div></div>']
+  divtemplate = ['<div class="row-6 inativo w-row"><div class="column-21 w-col w-col-2"><div class="text-block-6">','</div></div><div class="column-22 w-col w-col-2"><div class="text-block-7">PUT</div></div><div class="column-23 w-col w-col-2"><div class="text-block-8">','</div></div><div class="column-30 w-col w-col-2"><div class="text-block-12">','</div></div><div class="column-31 w-col w-col-2"><div class="text-block-13">','</div></div><div class="column-32 w-col w-col-2"><div class="text-block-14">','</div></div></div>']
+
+
   response = []
   for (i in contractId){
     jooj = i.split("_")
-    response.push(divtemplate[0] + jooj[0] + divtemplate[1] + jooj[1] + divtemplate[2] + jooj[2] + divtemplate[3])
+    response.push(divtemplate[0] +  + divtemplate[1] + + divtemplate[2] + + divtemplate[3] + + divtemplate[4] + + divtemplate[5] + + divtemplate[6] + + divtemplate[7])
 
   }
   return (check(response.join()))

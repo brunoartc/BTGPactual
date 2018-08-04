@@ -2,7 +2,7 @@ exports.main = function(prop) {
   return (`
     <!DOCTYPE html>
     <!--  This site was created in Webflow. http://www.webflow.com  -->
-    <!--  Last Published: Sat Aug 04 2018 00:04:03 GMT+0000 (UTC)  -->
+    <!--  Last Published: Sat Aug 04 2018 17:01:27 GMT+0000 (UTC)  -->
     <html data-wf-page="5b624b3d509255d77f387246" data-wf-site="5b57dbb4061bae8270a56a72">
     <head>
       <meta charset="utf-8">
@@ -10,9 +10,9 @@ exports.main = function(prop) {
       <meta content="Check" property="og:title">
       <meta content="width=device-width, initial-scale=1" name="viewport">
       <meta content="Webflow" name="generator">
-      <link href="/css/normalize.css" rel="stylesheet" type="text/css">
-      <link href="/css/webflow.css" rel="stylesheet" type="text/css">
-      <link href="/css/nicolass-dynamite-project-d5e70a.webflow.css" rel="stylesheet" type="text/css">
+      <link href="css/normalize.css" rel="stylesheet" type="text/css">
+      <link href="css/webflow.css" rel="stylesheet" type="text/css">
+      <link href="css/nicolass-dynamite-project-d5e70a.webflow.css" rel="stylesheet" type="text/css">
       <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js" type="text/javascript"></script>
       <script type="text/javascript">WebFont.load({  google: {    families: ["Exo:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"]  }});</script>
       <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
@@ -23,7 +23,7 @@ exports.main = function(prop) {
     <body>
       <div data-collapse="medium" data-animation="default" data-duration="400" class="navbar-2 w-nav">
         <div class="w-container">
-          <nav role="navigation" class="nav-menu w-nav-menu"><a href="index.html" class="nav-link-2 w-nav-link">Home</a><a href="core.html" class="nav-link-2 w-nav-link">Orders</a><a href="register.html" class="nav-link-2 w-nav-link">Register</a><a href="user.html" class="nav-link-2 w-nav-link">User</a><a href="check.html" class="nav-link-2 w-nav-link w--current">Check</a><a href="ipfs.html" class="nav-link-2 w-nav-link">IPFS</a></nav>
+          <nav role="navigation" class="nav-menu w-nav-menu"><a href="index.html" class="nav-link-2 w-nav-link">Home</a><a href="core.html" class="nav-link-2 w-nav-link">Orders</a><a href="register.html" class="nav-link-2 w-nav-link">Register</a><a href="register-contract-barrier.html" class="nav-link-2 w-nav-link">Register Barrier</a><a href="user.html" class="nav-link-2 w-nav-link">User</a><a href="check.html" class="nav-link-2 w-nav-link w--current">Check</a><a href="todays-contract.html" class="nav-link-2 w-nav-link">Today</a><a href="ipfs.html" class="nav-link-2 w-nav-link">IPFS</a></nav>
           <div class="w-nav-button">
             <div class="w-icon-nav-menu"></div>
           </div>
@@ -35,17 +35,65 @@ exports.main = function(prop) {
           <h1 class="heading-12">CONTRACT</h1>
           <div class="div-block-4">
             <div class="row-6 w-row">
-              <div class="column-21 w-col w-col-4">
+              <div class="column-21 w-col w-col-2">
                 <div class="text-block-6 bold">Strike</div>
               </div>
-              <div class="column-22 w-col w-col-4">
+              <div class="column-22 w-col w-col-2">
                 <div class="text-block-7 bold">Option (PUT/CALL)</div>
               </div>
-              <div class="column-23 w-col w-col-4">
+              <div class="column-23 w-col w-col-2">
                 <div class="text-block-8 bold">Expiration date</div>
               </div>
+              <div class="column-27 w-col w-col-2">
+                <div class="text-block-9">Type(Vanilla/Barrier)</div>
+              </div>
+              <div class="column-28 w-col w-col-2">
+                <div class="text-block-10">IN/OUT UP/DOWN</div>
+              </div>
+              <div class="column-29 w-col w-col-2">
+                <div class="text-block-11">Barrier</div>
+              </div>
             </div>
-            ` + prop + `
+            <div class="row-6 w-row">
+              <div class="column-21 w-col w-col-2">
+                <div class="text-block-6">612781.1</div>
+              </div>
+              <div class="column-22 w-col w-col-2">
+                <div class="text-block-7">PUT</div>
+              </div>
+              <div class="column-23 w-col w-col-2">
+                <div class="text-block-8">YYYY-MM-DD</div>
+              </div>
+              <div class="column-30 w-col w-col-2">
+                <div class="text-block-12">Vanilla</div>
+              </div>
+              <div class="column-31 w-col w-col-2">
+                <div class="text-block-13">IN_DOWN</div>
+              </div>
+              <div class="column-32 w-col w-col-2">
+                <div class="text-block-14">10000</div>
+              </div>
+            </div>
+            <div class="row-6 inativo w-row">
+              <div class="column-21 w-col w-col-2">
+                <div class="text-block-6">612781.1</div>
+              </div>
+              <div class="column-22 w-col w-col-2">
+                <div class="text-block-7">PUT</div>
+              </div>
+              <div class="column-23 w-col w-col-2">
+                <div class="text-block-8">YYYY-MM-DD</div>
+              </div>
+              <div class="column-30 w-col w-col-2">
+                <div class="text-block-12">Vanilla</div>
+              </div>
+              <div class="column-31 w-col w-col-2">
+                <div class="text-block-13">IN_DOWN</div>
+              </div>
+              <div class="column-32 w-col w-col-2">
+                <div class="text-block-14">10000</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
