@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Thu Aug 02 2018 21:39:19 GMT+0000 (UTC)  -->
+<!--  Last Published: Sat Aug 04 2018 00:04:03 GMT+0000 (UTC)  -->
 <html data-wf-page="5b5b88a9b008d17bcee68a94" data-wf-site="5b57dbb4061bae8270a56a72">
 <head>
   <meta charset="utf-8">
@@ -22,7 +22,7 @@
   <div class="section-8">
     <div data-collapse="medium" data-animation="default" data-duration="400" class="navbar-2 w-nav">
       <div class="w-container">
-        <nav role="navigation" class="nav-menu w-nav-menu"><a href="index.html" class="nav-link-2 w-nav-link">Home</a><a href="core.html" class="nav-link-2 w-nav-link w--current">Core</a><a href="register.html" class="nav-link-2 w-nav-link">Register</a><a href="user.html" class="nav-link-2 w-nav-link">User</a><a href="check.html" class="nav-link-2 w-nav-link">Check</a></nav>
+        <nav role="navigation" class="nav-menu w-nav-menu"><a href="index.html" class="nav-link-2 w-nav-link">Home</a><a href="core.html" class="nav-link-2 w-nav-link w--current">Orders</a><a href="register.html" class="nav-link-2 w-nav-link">Register</a><a href="user.html" class="nav-link-2 w-nav-link">User</a><a href="check.html" class="nav-link-2 w-nav-link">Check</a><a href="ipfs.html" class="nav-link-2 w-nav-link">IPFS</a></nav>
         <div class="w-nav-button">
           <div class="w-icon-nav-menu"></div>
         </div>
@@ -37,7 +37,7 @@
             <div class="column-8 w-col w-col-6">
               <div class="form-block w-form">
                 <form id="email-form" name="email-form" data-name="Email Form" class="form">
-                  <h1 class="heading-3">SELL</h1><label for="pre-o-3" class="field-label-2">PRICE:</label><input type="text" class="text-field w-input" maxlength="256" name="pre-o-3" data-name="Pre O 3" placeholder="Enter price" id="pre-o-3"><label for="Quantidade-3" class="field-label-3">QUANTITY:</label><input type="text" class="text-field-2 w-input" maxlength="256" name="Quantidade-3" data-name="Quantidade 3" placeholder="Enter quantity" id="Quantidade-3" required=""><label for="Valor-3" class="field-label-4">VALUE:</label><input type="text" class="text-field-3 w-input" maxlength="256" name="Valor-3" data-name="Valor 3" placeholder="Enter value" id="Valor-3" required=""><input type="submit" value="Register" data-wait="Please wait..." class="submit-button w-button"></form>
+                  <h1 class="heading-3">SELL</h1><label for="pre-o-3" class="field-label-2">PRICE:</label><input type="text" class="text-field w-input" maxlength="256" name="pre-o-3" data-name="Pre O 3" placeholder="Enter price" id="pre-o-3"><label for="Quantidade-3" class="field-label-3">QUANTITY:</label><input type="text" class="text-field-2 w-input" maxlength="256" name="Quantidade-3" data-name="Quantidade 3" placeholder="Enter quantity" id="Quantidade-3" required=""><label for="Valor-3" class="field-label-4">VALUE:</label><input type="text" class="text-field-3 w-input" maxlength="256" name="Valor-3" data-name="Valor 3" placeholder="Enter value" id="Valor-3" required=""><input type="submit" value="SELL" data-wait="Please wait..." class="submit-button sell w-button"></form>
                 <div class="w-form-done">
                   <div>Thank you! Your submission has been received!</div>
                 </div>
@@ -49,7 +49,7 @@
             <div class="column-9 w-col w-col-6">
               <div class="form-block w-form">
                 <form id="email-form" name="email-form" data-name="Email Form" class="form">
-                  <h1 class="heading-3">BUY</h1><label for="pre-o-3" class="field-label-2">PRICE:</label><input type="text" class="text-field w-input" maxlength="256" name="pre-o-3" data-name="Pre O 3" placeholder="Enter price" id="pre-o-3"><label for="Quantidade-3" class="field-label-3">QUANTITY:</label><input type="text" class="text-field-2 w-input" maxlength="256" name="Quantidade-3" data-name="Quantidade 3" placeholder="Enter quantity" id="Quantidade-3" required=""><label for="Valor-3" class="field-label-4">VALUE:</label><input type="text" class="text-field-3 w-input" maxlength="256" name="Valor-3" data-name="Valor 3" placeholder="Enter value" id="Valor-3" required=""><input type="submit" value="Register" data-wait="Please wait..." class="submit-button w-button"></form>
+                  <h1 class="heading-3">BUY</h1><label for="pre-o-3" class="field-label-2">PRICE:</label><input type="text" class="text-field w-input" maxlength="256" name="pre-o-3" data-name="Pre O 3" placeholder="Enter price" id="pre-o-3"><label for="Quantidade-3" class="field-label-3">QUANTITY:</label><input type="text" class="text-field-2 w-input" maxlength="256" name="Quantidade-3" data-name="Quantidade 3" placeholder="Enter quantity" id="Quantidade-3" required=""><label for="Valor-3" class="field-label-4">VALUE:</label><input type="text" class="text-field-3 w-input" maxlength="256" name="Valor-3" data-name="Valor 3" placeholder="Enter value" id="Valor-3" required=""><input type="submit" value="BUY" data-wait="Please wait..." class="submit-button buy w-button"></form>
                 <div class="w-form-done">
                   <div>Thank you! Your submission has been received!</div>
                 </div>
@@ -78,17 +78,19 @@
               </div>
             </div>
             <div class="row-2 second w-row">
-              <div class="column-11 w-col w-col-3">
+              <div class="column-11 w-col w-col-6">
                 <p class="paragraph-3">323.3</p>
               </div>
-              <div class="column-12 w-col w-col-3">
+              <div class="column-12 w-col w-col-6">
+                <p class="paragraph-4 buy">23232.2</p>
+              </div>
+            </div>
+            <div class="row-2 second w-row">
+              <div class="column-11 w-col w-col-6">
+                <p class="paragraph-3 sell">323.3</p>
+              </div>
+              <div class="column-12 w-col w-col-6">
                 <p class="paragraph-4">23232.2</p>
-              </div>
-              <div class="column-13 w-col w-col-3">
-                <p class="paragraph-4">23243.2</p>
-              </div>
-              <div class="column-14 w-col w-col-3">
-                <p class="paragraph-4">266.6</p>
               </div>
             </div>
           </div>
