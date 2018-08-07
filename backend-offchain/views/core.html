@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Sat Aug 04 2018 00:04:03 GMT+0000 (UTC)  -->
+<!--  Last Published: Sat Aug 04 2018 09:45:36 GMT+0000 (UTC)  -->
 <html data-wf-page="5b5b88a9b008d17bcee68a94" data-wf-site="5b57dbb4061bae8270a56a72">
 <head>
   <meta charset="utf-8">
@@ -36,8 +36,8 @@
           <div class="w-row">
             <div class="column-8 w-col w-col-6">
               <div class="form-block w-form">
-                <form id="email-form" name="email-form" data-name="Email Form" class="form">
-                  <h1 class="heading-3">SELL</h1><label for="pre-o-3" class="field-label-2">PRICE:</label><input type="text" class="text-field w-input" maxlength="256" name="pre-o-3" data-name="Pre O 3" placeholder="Enter price" id="pre-o-3"><label for="Quantidade-3" class="field-label-3">QUANTITY:</label><input type="text" class="text-field-2 w-input" maxlength="256" name="Quantidade-3" data-name="Quantidade 3" placeholder="Enter quantity" id="Quantidade-3" required=""><label for="Valor-3" class="field-label-4">VALUE:</label><input type="text" class="text-field-3 w-input" maxlength="256" name="Valor-3" data-name="Valor 3" placeholder="Enter value" id="Valor-3" required=""><input type="submit" value="SELL" data-wait="Please wait..." class="submit-button sell w-button"></form>
+                <form id="email-form" action="contratos/ordens/cadastrar" method="post" name="email-form" data-name="Email Form" class="form">
+                  <h1 class="heading-3">SELL</h1><label for="contractId" class="field-label-2">CONTRACT ID:</label><input type="text" class="text-field w-input" maxlength="256" name="contractId" data-name="contractId" id="contractId"><label for="accountId" class="field-label-3">ACCOUNT ID:</label><input type="text" class="text-field-2 w-input" maxlength="256" name="accountId" data-name="accountId" id="accountId" required=""><label for="price" class="field-label-4">PRICE:</label><input type="text" class="text-field-3 w-input" maxlength="256" name="price" data-name="price" id="price" required=""><input type="hidden" name="type" value="-1"><label for="amount" class="field-label-4">AMOUNT:</label><input type="text" class="w-input" maxlength="256" name="amount" data-name="amount" id="amount" required=""><input type="submit" value="SELL" data-wait="Please wait..." class="submit-button sell w-button"></form>
                 <div class="w-form-done">
                   <div>Thank you! Your submission has been received!</div>
                 </div>
@@ -48,8 +48,8 @@
             </div>
             <div class="column-9 w-col w-col-6">
               <div class="form-block w-form">
-                <form id="email-form" name="email-form" data-name="Email Form" class="form">
-                  <h1 class="heading-3">BUY</h1><label for="pre-o-3" class="field-label-2">PRICE:</label><input type="text" class="text-field w-input" maxlength="256" name="pre-o-3" data-name="Pre O 3" placeholder="Enter price" id="pre-o-3"><label for="Quantidade-3" class="field-label-3">QUANTITY:</label><input type="text" class="text-field-2 w-input" maxlength="256" name="Quantidade-3" data-name="Quantidade 3" placeholder="Enter quantity" id="Quantidade-3" required=""><label for="Valor-3" class="field-label-4">VALUE:</label><input type="text" class="text-field-3 w-input" maxlength="256" name="Valor-3" data-name="Valor 3" placeholder="Enter value" id="Valor-3" required=""><input type="submit" value="BUY" data-wait="Please wait..." class="submit-button buy w-button"></form>
+                <form id="email-form" action="contratos/ordens/cadastrar" method="post" name="email-form" data-name="Email Form" class="form">
+                  <h1 class="heading-3">BUY</h1><label for="contractId-2" class="field-label-2">CONTRACT ID:</label><input type="text" class="text-field w-input" maxlength="256" name="contractId" data-name="contractId" id="contractId-2"><label for="accountId-2" class="field-label-3">ACCOUNT ID:</label><input type="text" class="text-field-2 w-input" maxlength="256" name="accountId" data-name="accountId" id="accountId-2" required=""><label for="price-2" class="field-label-4">PRICE:</label><input type="text" class="text-field-3 w-input" maxlength="256" name="price" data-name="price" id="price-2" required=""><input type="hidden" name="type" value="1"><label for="amount-2" class="field-label-4">AMOUNT:</label><input type="text" class="w-input" maxlength="256" name="amount" data-name="amount" id="amount-2" required=""><input type="submit" value="BUY" data-wait="Please wait..." class="submit-button buy w-button"></form>
                 <div class="w-form-done">
                   <div>Thank you! Your submission has been received!</div>
                 </div>
@@ -62,7 +62,7 @@
         </div>
         <div class="column-6 w-col w-col-6">
           <h1 class="heading-9">ORDERS BOOK</h1>
-          <div class="div-2">
+          <div class="">
             <div class="row-2 w-row">
               <div class="column-11 w-col w-col-3">
                 <p class="paragraph-3 bold">Value</p>
@@ -70,29 +70,8 @@
               <div class="column-12 w-col w-col-3">
                 <p class="paragraph-4 bold">Buy</p>
               </div>
-              <div class="column-13 w-col w-col-3">
-                <p class="paragraph-4 bold">Sell</p>
-              </div>
-              <div class="column-14 w-col w-col-3">
-                <p class="paragraph-4 bold">Value</p>
-              </div>
             </div>
-            <div class="row-2 second w-row">
-              <div class="column-11 w-col w-col-6">
-                <p class="paragraph-3">323.3</p>
-              </div>
-              <div class="column-12 w-col w-col-6">
-                <p class="paragraph-4 buy">23232.2</p>
-              </div>
-            </div>
-            <div class="row-2 second w-row">
-              <div class="column-11 w-col w-col-6">
-                <p class="paragraph-3 sell">323.3</p>
-              </div>
-              <div class="column-12 w-col w-col-6">
-                <p class="paragraph-4">23232.2</p>
-              </div>
-            </div>
+            ` + prop + `
           </div>
         </div>
       </div>
